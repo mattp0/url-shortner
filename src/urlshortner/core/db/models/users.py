@@ -3,10 +3,12 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import DateTime, Enum as PgEnum, Index, String, func
+from sqlalchemy import DateTime, Index, String, func
+from sqlalchemy import Enum as PgEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from urlshortner.core.db.base import Base, UuidPK
+from urlshortner.core.db.models import Link
 
 
 class UserRole(str, Enum):
@@ -26,9 +28,7 @@ class User(Base):
     last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     # Relationships
-    links: Mapped[list["Link"]] = relationship(back_populates="owner", cascade="all, delete-orphan")
+    links: Mapped[list[Link]] = relationship(back_populates="owner", cascade="all, delete-orphan")
 
     # Uniqueness is case-insensitive on email
-    __table_args__ = (
-        Index("uq_users_email_lower", func.lower(email), unique=True),
-    )
+    __table_args__ = (Index("uq_users_email_lower", func.lower(email), unique=True),)

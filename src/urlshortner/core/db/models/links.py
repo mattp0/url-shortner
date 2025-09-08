@@ -3,14 +3,13 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import (
-    Boolean, CheckConstraint, DateTime, Enum as PgEnum, ForeignKey, Index, SmallInteger,
-    String, Text, func
-)
+from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, SmallInteger, String, Text, func
+from sqlalchemy import Enum as PgEnum
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from urlshortner.core.db.base import Base, UuidPK
+from urlshortner.core.db.models import ClickEvent, LinkStatsDaily, User
 
 
 class SafetyStatus(str, Enum):
@@ -28,8 +27,8 @@ class Link(Base):
     slug: Mapped[str] = mapped_column(String(64), nullable=False)
     target_url: Mapped[str] = mapped_column(Text, nullable=False)
 
-    owner_id: Mapped["UuidPK"] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    owner: Mapped["User"] = relationship(back_populates="links")
+    owner_id: Mapped[UuidPK] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    owner: Mapped[User] = relationship(back_populates="links")
 
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -46,8 +45,8 @@ class Link(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
 
-    clicks: Mapped[list["ClickEvent"]] = relationship(back_populates="link", cascade="all, delete-orphan")
-    stats_daily: Mapped[list["LinkStatsDaily"]] = relationship(back_populates="link", cascade="all, delete-orphan")
+    clicks: Mapped[list[ClickEvent]] = relationship(back_populates="link", cascade="all, delete-orphan")
+    stats_daily: Mapped[list[LinkStatsDaily]] = relationship(back_populates="link", cascade="all, delete-orphan")
 
     __table_args__ = (
         # Enforce allowed characters/length at the DB level

@@ -1,11 +1,15 @@
-from .users import User, UserRole
-from .links import Link, SafetyStatus
 from .analytics import ClickEvent, LinkStatsDaily
-from .lists import DomainDenylist, DomainAllowlist
+from .links import Link, SafetyStatus
+from .lists import DomainAllowlist, DomainDenylist
+from .users import User, UserRole
 
 __all__ = [
-    "User", "UserRole",
-    "Link", "SafetyStatus",
-    "ClickEvent", "LinkStatsDaily",
-    "DomainDenylist", "DomainAllowlist",
+    "ClickEvent",
+    "DomainAllowlist",
+    "DomainDenylist",
+    "Link",
+    "LinkStatsDaily",
+    "SafetyStatus",
+    "User",
+    "UserRole",
 ]
