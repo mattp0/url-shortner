@@ -17,6 +17,25 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+dependencies = [
+    "alembic>=1.16.5",
+    "asyncpg>=0.30.0",
+    "cryptography>=45.0.7",
+    "email-validator>=2.3.0",
+    "fastapi>=0.116.1",
+    "httpx>=0.28.1",
+    "idna>=3.10",
+    "passlib[bcrypt]>=1.7.4",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
+    "pyjwt>=2.10.1",
+    "redis>=6.4.0",
+    "rq>=2.6.0",
+    "sqlalchemy[asyncio]>=2.0.43",
+    "tldextract>=5.3.0",
+    "uvicorn[standard]>=0.35.0",
+    "validators>=0.35.0",
+]
 
 [project.urls]
 Homepage = "https://mattp0.github.io/urlshortner/"
@@ -28,11 +47,12 @@ dev = [
     "pytest>=7.2.0",
     "pre-commit>=2.20.0",
     "tox-uv>=1.11.3",
-
     "mypy>=0.991",
-
     "ruff>=0.11.5",
-
+    "pytest-asyncio>=1.1.0",
+    "pytest-cov>=6.3.0",
+    "tox>=4.30.2",
+    "sqlalchemy[mypy]>=2.0.43",
 ]
 
 [build-system]
