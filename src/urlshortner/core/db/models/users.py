@@ -2,13 +2,16 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, Index, String, func
 from sqlalchemy import Enum as PgEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from urlshortner.core.db.base import Base, UuidPK
-from urlshortner.core.db.models import Link
+
+if TYPE_CHECKING:
+    from .links import Link
 
 
 class UserRole(str, Enum):

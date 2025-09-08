@@ -1,15 +1,20 @@
 from __future__ import annotations
 
+import uuid
 from datetime import datetime
 from enum import Enum
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, SmallInteger, String, Text, func
 from sqlalchemy import Enum as PgEnum
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from urlshortner.core.db.base import Base, UuidPK
-from urlshortner.core.db.models import ClickEvent, LinkStatsDaily, User
+
+if TYPE_CHECKING:
+    from .analytics import ClickEvent, LinkStatsDaily
+    from .users import User
 
 
 class SafetyStatus(str, Enum):
@@ -22,12 +27,17 @@ class SafetyStatus(str, Enum):
 class Link(Base):
     __tablename__ = "links"
 
-    id: Mapped[UuidPK]
+    id: Mapped[UuidPK]  # ← the one and only primary key
+
+    owner_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     # Global, case-insensitive uniqueness for slugs
     slug: Mapped[str] = mapped_column(String(64), nullable=False)
     target_url: Mapped[str] = mapped_column(Text, nullable=False)
 
-    owner_id: Mapped[UuidPK] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     owner: Mapped[User] = relationship(back_populates="links")
 
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)

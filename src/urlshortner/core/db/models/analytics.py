@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import BigInteger, Date, DateTime, ForeignKey, Index, SmallInteger, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from urlshortner.core.db.base import Base, UuidPK
-from urlshortner.core.db.models import Link
+
+if TYPE_CHECKING:
+    from .links import Link
 
 
 class ClickEvent(Base):

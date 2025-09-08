@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+import urlshortner.core.db.models  # noqa: F401
 from urlshortner.core.db import Base
 
 # this is the Alembic Config object, which provides
